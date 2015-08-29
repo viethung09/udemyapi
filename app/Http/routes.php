@@ -21,9 +21,9 @@ Route::post('auth/register', 'Auth\AuthController@postRegister');
 
 
 Route::group(['prefix' => 'api/v1'], function () {
-    Route::resource('makers', 'LessonsController', ['except' => ['create', 'edit']]);
+    Route::resource('makers', 'MakerController', ['except' => ['create', 'edit']]);
 
     Route::resource('vehicles', 'VehicleController', ['only' => ['index']]);
 
-    Route::resource('makers.vehicles', 'MakersVehicles', ['except' => ['edit', 'create']]);
+    Route::resource('makers.vehicles', 'MakersVehiclesController', ['except' => ['edit', 'create']]);
 });
