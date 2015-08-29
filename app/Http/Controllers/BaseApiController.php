@@ -1,12 +1,20 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Api\Transformers\MakerTransformer;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Response;
 
 class BaseApiController extends Controller
 {
+    protected $makerTransformer;
+
+    function __construct(MakerTransformer $makerTransformer)
+    {
+        $this->makerTransformer = $makerTransformer;
+    }
+
     private $statusCode = \Illuminate\Http\Response::HTTP_OK;
 
     public function getStatusCode()

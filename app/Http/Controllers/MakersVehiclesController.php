@@ -2,21 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Api\Transformers\VehicleTransformer;
+use App\Http\Controllers\BaseApiController;
+use App\Http\Controllers\Controller;
+use App\Http\Requests;
+use App\Maker;
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-
-class MakersVehiclesController extends Controller
+class MakersVehiclesController extends BaseApiController
 {
+
+    protected $vehicleTransformer;
+
+    function __construct(VehicleTransformer $vehicleTransformer)
+    {
+        $this->vehicleTransformer = $vehicleTransformer;
+    }
     /**
-     * Display a listing of the resource.
-     *
+     * Display the vehicles that associated with the maker.
+     * @param int $makerId
      * @return Response
      */
-    public function index()
+    public function index($makerId = null)
     {
-        //
+
+        if (! $vehicle = Maker::find($makerId)) {
+            return $this->responseNotFound('Maker does not exist.');
+
+        }
+
+        return $this->setStatusCode(\Illuminate\Http\Response::HTTP_OK)
+                    ->respond(['data' => [
+                                Maker::find($makerId),
+                                $this->vehicleTransformer->transformCollection(Maker::find($makerId)->vehicles->toArray())
+                                ]
+        ]);
     }
 
     /**
@@ -41,14 +61,27 @@ class MakersVehiclesController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified vehicle associated with with maker.
      *
      * @param  int  $id
      * @return Response
      */
-    public function show($id)
+    public function show($makerId, $vehicleId)
     {
-        //
+        if (! $maker = Maker::find($makerId)) {
+            return $this->responseNotFound('Maker does not exist.');
+
+        }
+        $vehicle = $maker->vehicles->find($vehicleId); //dd($vehicle);
+        if (! $vehicle) {
+            return $this->responseNotFound('Vehicle does not exist.');
+        }
+        return $this->setStatusCode(\Illuminate\Http\Response::HTTP_OK)
+                    ->respond(['data' => [
+                                $maker,
+                                $this->vehicleTransformer->transform($vehicle->toArray())
+                              ]
+        ]);
     }
 
     /**
