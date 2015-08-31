@@ -37,5 +37,4 @@ class VehicleController extends BaseApiController
         return $this->respondWithPagination($vehicles, $data);
     }
 
-
 }

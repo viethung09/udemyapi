@@ -6,6 +6,7 @@ use App\Api\Transformers\VehicleTransformer;
 use App\Http\Controllers\BaseApiController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use App\Http\Requests\CreateVehicleRequest;
 use App\Maker;
 use Illuminate\Http\Request;
 
@@ -55,9 +56,17 @@ class MakersVehiclesController extends BaseApiController
      * @param  Request  $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(CreateVehicleRequest $request, $makerId)
     {
-        //
+        $maker = Maker::find($makerId);
+
+        if (! $maker) {
+            return $this->responseNotFound('Maker does not exist.');
+        }
+        $data = $request->all();
+        $maker->vehicles()->create($data);
+
+        return $this->responseCreated('The Vehicle associated with maker was created success!');
     }
 
     /**

@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Api\Transformers\MakerTransformer;
 use App\Http\Controllers\BaseApiController;
-use App\Http\Requests;
+
+use App\Http\Requests\CreateMakerRequest;
 use App\Maker;
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Input;
 
 class MakerController extends BaseApiController
@@ -50,6 +51,15 @@ class MakerController extends BaseApiController
 
         return $this->setStatusCode(\Illuminate\Http\Response::HTTP_OK)
                     ->respond(['data' => $this->makerTransformer->transform($maker)]);
+    }
+
+    public function store(CreateMakerRequest $request)
+    {
+        $data = $request->only(['name', 'phone']);
+
+        Maker::create($data);
+
+        return $this->responseCreated('Maker was created.');
     }
 
 
