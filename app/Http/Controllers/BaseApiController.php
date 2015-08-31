@@ -87,8 +87,31 @@ class BaseApiController extends Controller
     {
         return $this->setStatusCode(\Illuminate\Http\Response::HTTP_CREATED)
                     ->respond([
-                        'status' => 'Successfull',
+                        'status' => $this->statusCode,
                         'message' => $message
+        ]);
+    }
+
+    public function responseDeleted($message)
+    {
+        return $this->setStatusCode(\Illuminate\Http\Response::HTTP_OK)
+                    ->respond([
+                        'status' => $this->statusCode,
+                        'message' => $message
+        ]);
+    }
+
+    /**
+     * The responese code and message for the passed.
+     * @param  string $message
+     * @return mixed
+     */
+    public function responseUpdated($message)
+    {
+        return $this->setStatusCode(\Illuminate\Http\Response::HTTP_OK)
+                    ->respond([
+                        'message' => $message,
+                        'status' => $this->statusCode
         ]);
     }
 

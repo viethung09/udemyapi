@@ -62,5 +62,40 @@ class MakerController extends BaseApiController
         return $this->responseCreated('Maker was created.');
     }
 
+    public function update(CreateMakerRequest $request, $id)
+    {
+        $maker = Maker::find($id);
+
+        if (! $maker) {
+            return $this->responseNotFound('Maker does not exist.');
+        }
+
+        $maker->name = $request->get('name');
+        $maker->phone = $request->get('phone');
+        $maker->save();
+
+        return $this->setStatusCode(\Illuminate\Http\Response::HTTP_OK)
+                    ->respond(['data' => $this->makerTransformer->transform($maker)]);
+    }
+
+    public function destroy($id)
+    {
+        $maker = Maker::find($id);
+
+        if (! $maker) {
+            return $this->responseNotFound('Maker does not exist.');
+        }
+        $vehicles = $maker->vehicles;
+
+        if (sizeof($vehicles) > 0) {
+            return $this->setStatusCode(\Illuminate\Http\Response::HTTP_NOT_FOUND)
+                        ->responseWithError('This maker has associated with vehicles. Delete his vehicles first.');
+        }
+
+        $maker->delete();
+
+        return $this->responseDeleted('The maker has been deleted successfully');
+    }
+
 
 }

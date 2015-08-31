@@ -100,19 +100,45 @@ class MakersVehiclesController extends BaseApiController
      * @param  int  $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(CreateVehicleRequest $request, $makerId, $vehicleId)
     {
-        //
+        $maker = Maker::find($makerId);
+
+        if (! $maker) {
+            return $this->responseNotFound('Maker does not exist.');
+        }
+
+        $vehicle = $maker->vehicles->find($vehicleId);
+
+        if (! $vehicle) {
+            return $this->responseNotFound('Vehicle does not exist.');
+        }
+        $vehicle->color = $request->get('color');
+        $vehicle->capacity = $request->get('capacity');
+        $vehicle->power = $request->get('power');
+        $vehicle->speed = $request->get('speed');
+        $vehicle->save();
+
+        return $this->responseUpdated('Vehicle was updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function destroy($id)
+    public function destroy($makerId, $vehicleId)
     {
-        //
+        $maker = Maker::find($makerId);
+
+        if (! $maker) {
+            return $this->responseNotFound('Maker does not exist.');
+        }
+        $vehicle = $maker->vehicles->find($vehicleId);
+
+        if (! $vehicle) {
+            return $this->setStatusCode(\Illuminate\Http\Response::HTTP_NOT_FOUND)
+                        ->responseWithError('This vehicle does not exist.');
+        }
+
+        $vehicle->delete();
+
+        return $this->responseDeleted('The vehecle has been deleted successfully');
     }
+
 }
