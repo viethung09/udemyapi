@@ -36,18 +36,7 @@ class MakersVehiclesController extends BaseApiController
                     ->respond(['data' => [
                                 Maker::find($makerId),
                                 $this->vehicleTransformer->transformCollection(Maker::find($makerId)->vehicles->toArray())
-                                ]
-        ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
+        ]]);
     }
 
     /**

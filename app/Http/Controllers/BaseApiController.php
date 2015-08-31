@@ -35,12 +35,14 @@ class BaseApiController extends Controller
 
     public function responseNotFound($message = 'Not Found!')
     {
-        return $this->setStatusCode(\Illuminate\Http\Response::HTTP_NOT_FOUND)->responseWithError($message);
+        return $this->setStatusCode(\Illuminate\Http\Response::HTTP_NOT_FOUND)
+                    ->responseWithError($message);
     }
 
     public function responseInternalError($message = 'Internal Error!')
     {
-        return $this->setStatusCode(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)->responseWithError($message);
+        return $this->setStatusCode(\Illuminate\Http\Response::HTTP_INTERNAL_SERVER_ERROR)
+                    ->responseWithError($message);
     }
 
     public function respond($data, $headers = [])
