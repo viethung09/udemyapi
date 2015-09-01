@@ -17,6 +17,7 @@ class MakersVehiclesController extends BaseApiController
 
     function __construct(VehicleTransformer $vehicleTransformer)
     {
+        $this->middleware('auth.basic.once');
         $this->vehicleTransformer = $vehicleTransformer;
     }
     /**

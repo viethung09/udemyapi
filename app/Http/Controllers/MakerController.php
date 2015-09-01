@@ -17,6 +17,7 @@ class MakerController extends BaseApiController
 
     function __construct(MakerTransformer $makerTransformer)
     {
+        $this->middleware('auth.basic.once');
         $this->makerTransformer = $makerTransformer;
     }
     /**
