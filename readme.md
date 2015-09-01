@@ -9,7 +9,7 @@
 
 ## Official Documentation
 
-Still in Development!
+My own API.
 
 
 
